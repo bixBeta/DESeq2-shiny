@@ -127,6 +127,13 @@ server <- shinyServer(function(input, output, session) {
             
         })
         
+        m <- list(
+            l = 50,
+            r = 50,
+            b = 100,
+            t = 100,
+            pad = 4
+        )
         output$plot <- renderPlotly({
             
             if(is.null(input$choice)){return()}
@@ -136,11 +143,11 @@ server <- shinyServer(function(input, output, session) {
                     marker = list(size = 8,
                                   line = list(color = ~ name , width = 1))) %>% 
                 add_markers() %>%
-                layout(
-                    scene = list(xaxis = list(title = 'PC1'),
-                                 yaxis = list(title = 'PC2'),
-                                 zaxis = list(title = 'PC3')
-                    )
+                layout(autosize = F, width = 800, height = 800, margin =m,
+                       scene = list(xaxis = list(title = 'PC1'),
+                                    yaxis = list(title = 'PC2'),
+                                    zaxis = list(title = 'PC3')
+                       )
                 )
         })
         

@@ -1,0 +1,12 @@
+name: PCA-Explorer
+title: PCA-Explorer
+username:
+account: bixbeta
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 2278197
+bundleId: 3129988
+url: https://bixbeta.shinyapps.io/PCA-Explorer/
+when: 1589175101.24722
+asMultiple: FALSE
+asStatic: FALSE

@@ -5,12 +5,14 @@ library(shiny)
 library(plotly)
 library(DT)
 library(dplyr)
+library(shinyjs)
 options(shiny.maxRequestSize = 10000*1024^2)
 
 
 
 # Define UI
-ui <- shinyUI(navbarPage(title = "SARTools - Explorer",
+ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
+                         
                          
                          tabPanel(title = "Upload",
                                   sidebarLayout(
@@ -18,8 +20,11 @@ ui <- shinyUI(navbarPage(title = "SARTools - Explorer",
                                       fileInput("file", label = "Count Matrix (tab separated .txt file)"),
                                       fileInput("file2", label = "MetaData target file (tab separated .txt file)"),
                                       actionButton(inputId="run","RUN"),
+                                      hr(),
+                                      textOutput("log"),
+                                      
                                       # plotOutput("hist"), 
-                                      width = 3), 
+                                      width = 4), 
                                     
                                     mainPanel(
                                       
@@ -53,10 +58,13 @@ ui <- shinyUI(navbarPage(title = "SARTools - Explorer",
                                     mainPanel(
                                       plotlyOutput("plot2"))
                                   )
+                         ),
+                         
+                         shinyjs::useShinyjs(),
+                         hr(),
+                         div(class = "footer",
+                             includeHTML("footer.html")
                          )
-                         
-                         
-                         
                          
 )
 )

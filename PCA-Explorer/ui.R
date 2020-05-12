@@ -12,17 +12,21 @@ options(shiny.maxRequestSize = 10000*1024^2)
 # Define UI
 ui <- shinyUI(navbarPage(title = "SARTools - Explorer",
                          
-                         tabPanel(title = "Main",
+                         tabPanel(title = "Upload",
                                   sidebarLayout(
-                                      sidebarPanel(
-                                          fileInput("file", label = ""),
-                                          actionButton(inputId="run","RUN"),
-                                          # plotOutput("hist"), 
-                                          width = 3), 
+                                    sidebarPanel(
+                                      fileInput("file", label = "Count Matrix (tab separated .txt file)"),
+                                      fileInput("file2", label = "MetaData target file (tab separated .txt file)"),
+                                      actionButton(inputId="run","RUN"),
+                                      # plotOutput("hist"), 
+                                      width = 3), 
+                                    
+                                    mainPanel(
                                       
-                                      mainPanel(
-                                          DT::dataTableOutput("mytable1")
-                                      )
+                                      DT::dataTableOutput("mytable1"),
+                                      DT::dataTableOutput("mytable2")
+                                      
+                                    )
                                   )
                          ),
                          
@@ -30,24 +34,24 @@ ui <- shinyUI(navbarPage(title = "SARTools - Explorer",
                          
                          tabPanel("3D-PCA", 
                                   sidebarLayout(
-                                      sidebarPanel(
-                                          uiOutput("groups"),width = 3), 
-                                      
-                                      mainPanel(
-                                          plotlyOutput("plot"))
+                                    sidebarPanel(
+                                      uiOutput("groups"),width = 3, height =3), 
+                                    
+                                    mainPanel(
+                                      plotlyOutput("plot"))
                                   )
                          ),
                          
                          tabPanel("2D-PCA", 
                                   sidebarLayout(
-                                      sidebarPanel(
-                                          uiOutput("groups2"),width = 4,
-                                          plotOutput(outputId = "scree"),
-                                          downloadButton("downloadData", "Download Eigenvals"),
-                                          verbatimTextOutput("prop")), 
-                                      
-                                      mainPanel(
-                                          plotlyOutput("plot2"))
+                                    sidebarPanel(
+                                      uiOutput("groups2"),width = 4,
+                                      plotOutput(outputId = "scree"),
+                                      downloadButton("downloadData", "Download Eigenvals"),
+                                      verbatimTextOutput("prop")), 
+                                    
+                                    mainPanel(
+                                      plotlyOutput("plot2"))
                                   )
                          )
                          

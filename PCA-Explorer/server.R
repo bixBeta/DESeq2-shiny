@@ -3,13 +3,35 @@ server <- shinyServer(function(input, output, session) {
     
     
     observeEvent(input$run,{
-        if ( is.null(input$file)) return(NULL)
-        inFile <- input$file
-        file <- inFile$datapath
+        # if ( is.null(input$file)) return(NULL)
+        # inFile <- input$file$datapath
+        # if ( is.null(input$file2)) return(NULL)
+        # inFile2 <- input$file2$datapath
+        # 
+        # file <- inFile$datapath
+        # file2 <- inFile$datapath
+        
+        req(input$file)
+        
+        counts <- read.table(input$file$datapath,
+                             header = T,
+                             sep = "\t",
+                             row.names = 1)
+        
+        req(input$file2)
+        
+        target <- read.table(input$file2$datapath,
+                             header = T,
+                             sep = "\t")
+        
         # load the file into new environment and get it from there
         e = new.env()
-        name <- load(file, envir = .GlobalEnv)
-        
+        # counts.u <- read.table(infile(), header = T, row.names = 1, sep = "\t")
+        # target.u <- read.table(infile2(), header = T, sep = "\t")
+        # 
+        # counts <- counts.u[,order(names(counts.u))]
+        # target <- target.u[order(target.u$label),]
+        # 
         progress <- Progress$new(session, min=1, max=20)
         on.exit(progress$close())
         
@@ -21,9 +43,12 @@ server <- shinyServer(function(input, output, session) {
         }
         
         # Plot the data
-        target2 <- target %>% select(label, group)
+        #target2 <- target %>% select(label, group)
         output$mytable1 <- DT::renderDataTable({
-            DT::datatable(target2)
+            DT::datatable(target, list(pageLength = 5, scrollX=T))
+        })
+        output$mytable2 <- DT::renderDataTable({
+            DT::datatable(counts, list(pageLength = 5, scrollX=T))
         })
         
         output$prop <- renderPrint(summary(pca))
@@ -31,9 +56,9 @@ server <- shinyServer(function(input, output, session) {
         
         # output$groups <- renderUI({
         #   tagList(
-        #     selectInput(inputId = "choice", label = "Select Groupings", 
+        #     selectInput(inputId = "choice", label = "Select Groupings",
         #                 choices = colnames(target), selected = "group"))
-        #   
+        #
         # })
         
         
@@ -97,10 +122,10 @@ server <- shinyServer(function(input, output, session) {
         
         ### -------------------------------------------------------------------------------------------------------------------
         
-        hc2 <- hclust(dist(t(assay(vsd))), method="ward.D") 
+        hc2 <- hclust(dist(t(assay(vsd))), method="ward.D")
         
-        output$clust <- renderPlot(plot(hc2, hang=-1, ylab="Height", las=2, 
-                                        xlab="Method: Euclidean distance - Ward criterion", 
+        output$clust <- renderPlot(plot(hc2, hang=-1, ylab="Height", las=2,
+                                        xlab="Method: Euclidean distance - Ward criterion",
                                         main="Cluster Dendrogram"))
         
         output$groups <- renderUI({
@@ -141,7 +166,7 @@ server <- shinyServer(function(input, output, session) {
                     color = ~ get(input$choice),
                     #colors = color2,
                     marker = list(size = 8,
-                                  line = list(color = ~ name , width = 1))) %>% 
+                                  line = list(color = ~ name , width = 1))) %>%
                 add_markers() %>%
                 layout(autosize = F, width = 800, height = 800, margin =m,
                        scene = list(xaxis = list(title = 'PC1'),

@@ -2,6 +2,8 @@
 
 The limited version of this app can be accessed here: https://bixbeta.shinyapps.io/PCA-Explorer/
 
+To run locally (strongly recommended), use the following instructions:
+
 From terminal Launch R and INSTALL the following packages:
 
 `if (!requireNamespace("BiocManager", quietly = TRUE))

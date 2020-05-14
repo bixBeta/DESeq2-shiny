@@ -1,4 +1,4 @@
-# PCA-Explorer + DGE analysis using DESeq2
+### PCA-Explorer + DGE analysis using DESeq2-Shiny
 
 From terminal Launch R and INSTALL the following packages:
 

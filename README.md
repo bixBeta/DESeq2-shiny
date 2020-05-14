@@ -27,7 +27,7 @@ git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shi
 cd to `PCA-Explorer/PCA-Explorer`<br>
 copy the path for the ui and server files by typing `pwd`
 
-From terminal type `R -e shiny::runApp('~/path/to/PCA-Explorer/PCA-Explorer')`<br>
+From terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
 Copy the ip address and paste it in a web browser to launch the app
 
 Example CountMatrix and metadata target files are available in the `examples` folder

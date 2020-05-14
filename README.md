@@ -3,21 +3,21 @@
 From terminal Launch R and INSTALL the following packages:
 
 `if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")`
+  install.packages("BiocManager")`<br>
 `if (!requireNamespace("DESeq2", quietly = TRUE))
-  BiocManager::install("DESeq2")`
+  BiocManager::install("DESeq2")`<br>
 `if (!requireNamespace("dplyr", quietly = TRUE))
- install.packages("dplyr")`
+ install.packages("dplyr")`<br>
 `if (!requireNamespace("plotly", quietly = TRUE))
-  install.packages("plotly")`
+  install.packages("plotly")`<br>
 `if (!requireNamespace("shiny", quietly = TRUE))
-  BiocManager::install("shiny")`
+  BiocManager::install("shiny")`<br>
 `if (!requireNamespace("tibble", quietly = TRUE))
- install.packages("tibble")`
+ install.packages("tibble")`<br>
 `if (!requireNamespace("DT", quietly = TRUE))
-  install.packages("DT")`
+  install.packages("DT")`<br>
 `if (!requireNamespace("shinyjs", quietly = TRUE))
-  BiocManager::install("shinyjs")`
+  BiocManager::install("shinyjs")`<br>
 
 git clone this repository using `git clone https://github.com/bixBeta/PCA-Explorer.git`
 cd to `PCA-Explorer/PCA-Explorer`

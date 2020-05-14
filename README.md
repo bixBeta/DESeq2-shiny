@@ -19,14 +19,14 @@ From terminal Launch R and INSTALL the following packages:
 `if (!requireNamespace("shinyjs", quietly = TRUE))
   BiocManager::install("shinyjs")`<br>
 
-git clone this repository using `git clone https://github.com/bixBeta/PCA-Explorer.git`
-cd to `PCA-Explorer/PCA-Explorer`
+git clone this repository using `git clone https://github.com/bixBeta/PCA-Explorer.git`<br>
+cd to `PCA-Explorer/PCA-Explorer`<br>
 copy the path for the ui and server files by typing `pwd`
 
-From terminal type `R -e shiny::runApp('~/path/to/PCA-Explorer/PCA-Explorer')`
+From terminal type `R -e shiny::runApp('~/path/to/PCA-Explorer/PCA-Explorer')`<br>
 Copy the ip address and paste it in a web browser to launch the app
 
-Example Count Matrix and Metadata target files are available in the `examples` folder
+Example CountMatrix and metadata target files are available in the `examples` folder
 
 
 

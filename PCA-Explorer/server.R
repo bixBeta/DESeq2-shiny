@@ -3,6 +3,7 @@ server <- shinyServer(function(input, output, session) {
     
     
     observeEvent(input$run,{
+        
         # if ( is.null(input$file)) return(NULL)
         # inFile <- input$file$datapath
         # if ( is.null(input$file2)) return(NULL)
@@ -17,12 +18,21 @@ server <- shinyServer(function(input, output, session) {
                              header = T,
                              sep = "\t",
                              row.names = 1)
+        counts = counts[ , order(names(counts))]
         
         req(input$file2)
+        
+        renderUI(actionButton("rmv", "x"),)
         
         target <- read.table(input$file2$datapath,
                              header = T,
                              sep = "\t")
+        
+        rownames(target) <- target$label
+        
+        target = target[order(rownames(target)), ]
+        
+        
         
         # load the file into new environment and get it from there
         e = new.env()
@@ -72,6 +82,7 @@ server <- shinyServer(function(input, output, session) {
         library("tidyverse")
         library("plotly")
         #
+        
         ## -------------------------------------------------------------------------------------------------------------------
         dds <- DESeqDataSetFromMatrix(countData = counts,
                                       colData = target,
@@ -86,8 +97,28 @@ server <- shinyServer(function(input, output, session) {
             Sys.sleep(0.1)
         }
         
-        dds <- DESeq(dds)
-        resultsNames(dds)
+        
+        withCallingHandlers({
+            shinyjs::html("log", "DESeq2 Log: ")
+            dds <- DESeq(dds)
+        },
+        message = function(m) {
+            shinyjs::html(id = "log", html = m$message, add = TRUE)
+            shinyjs::html(id = "log", html = "<br>", add = TRUE)
+        }, collapse="<br>")
+        
+        
+        # observeEvent(input$rmv, {
+        #     removeUI(
+        #         selector = "div:has(> #log)"
+        #     )})
+        
+        
+        
+        
+        
+        
+        #resultsNames(dds)
         #
         # ## -------------------------------------------------------------------------------------------------------------------
         vsd <- varianceStabilizingTransformation(dds, blind=T)
@@ -162,13 +193,14 @@ server <- shinyServer(function(input, output, session) {
         output$plot <- renderPlotly({
             
             if(is.null(input$choice)){return()}
-            plot_ly(data = d2, x = ~ PC1, y= ~ PC2, z = ~ PC3,
+            plot_ly(data = d2, x = ~ PC1, y= ~ PC2, z = ~ PC3, 
+                    width = 800, height = 800,
                     color = ~ get(input$choice),
                     #colors = color2,
                     marker = list(size = 8,
                                   line = list(color = ~ name , width = 1))) %>%
                 add_markers() %>%
-                layout(autosize = F, width = 800, height = 800, margin =m,
+                layout(autosize = F, margin =m,
                        scene = list(xaxis = list(title = 'PC1'),
                                     yaxis = list(title = 'PC2'),
                                     zaxis = list(title = 'PC3')
@@ -180,12 +212,12 @@ server <- shinyServer(function(input, output, session) {
         output$plot2 <- renderPlotly({
             
             if(is.null(input$choice2)){return()}
-            plot_ly(data = d2, x = ~ PC1, y = ~ PC2,
+            plot_ly(data = d2, x = ~ PC1, y = ~ PC2, width = 800, height = 800,
                     color = ~ get(input$choice2),
-                    marker = list(size = 8,
+                    marker = list(size = 10,
                                   line = list(color = ~ name, width = 1))) %>%
                 add_markers() %>%
-                layout(autosize = F, width = 800, height = 800,
+                layout(autosize = F, 
                        xaxis = list(title = 'PC1'),
                        yaxis = list(title = 'PC2'))
             
@@ -204,7 +236,7 @@ server <- shinyServer(function(input, output, session) {
         
         
         
-        # Reactive value for selected dataset ----
+        # save eigenvals to a new object 
         datasetInput <- pca$x
         
         # Downloadable csv of selected dataset ----
@@ -220,7 +252,104 @@ server <- shinyServer(function(input, output, session) {
         
         
         
+        #----------------------------------------------------------
+        #----------------------------------------------------------
+        #----------------------------------------------------------
+        #-- Differential Expression Analysis
+        
+        # Make Normalized Counts Downloadable
+        
+        normalized_counts <- counts(dds, normalized=TRUE)
+        colnames(normalized_counts) = paste0("norm.", colnames(normalized_counts))
+        normalized_counts <- round(normalized_counts, digits = 0)
+        # Downloadable csv of normalized counts dataset ----
+        
+        output$normcounts <- downloadHandler(
+            filename = function() {
+                paste("normalizedCounts.csv", sep = "")
+            },
+            content = function(file) {
+                write.csv(normalized_counts, file, row.names = T, quote = F, col.names = NA)
+            }
+        )
+        
+        output$numerator <- renderUI({
+            
+            
+            tagList(
+                selectInput(inputId = "choice4", label = "Select Group of interest for DE",
+                            choices = dds$group)
+            )
+        })
+        
+        output$denominator <- renderUI({
+            
+            
+            tagList(
+                selectInput(inputId = "choice3", label = "Select Base-level for DE",
+                            choices = dds$group)
+            )
+        })
+        
+        
+        de.data <- reactive({
+            
+            if (input$choice4 == "")
+                return(NULL)
+            if (input$choice3 == "")
+                return(NULL)
+            round(as.data.frame(results(dds, contrast=c("group", as.character(input$choice4), 
+                                                        as.character(input$choice3)), alpha = 0.05)),3)
+            
+            
+        })
+        
+        
+        ma.data <- reactive({
+            
+            if (input$choice4 == "")
+                return(NULL)
+            if (input$choice3 == "")
+                return(NULL)
+            de.test <- results(dds, contrast=c("group", input$choice4, input$choice3), alpha = 0.05)
+            plotMA(de.test, main = paste0("MAPlot ", input$choice4, "_vs_", input$choice3)) 
+            
+        })
+        
+        output$contrast <- DT::renderDataTable({
+            
+            DT::datatable(de.data(), list(pageLength = 10, scrollX=T))
+        })
+        
+        
+        output$MAPlot <-
+            renderPlot(ma.data())
+        
+        
+        
+        download.results <- reactive({
+            
+            if (input$choice4 == "")
+                return(NULL)
+            if (input$choice3 == "")
+                return(NULL)
+            de.test.d <- results(dds, contrast=c("group", input$choice4, input$choice3), alpha = 0.05)
+            de.test.d <- as.data.frame(de.test.d)
+        })
+        
+        output$results <- downloadHandler(
+            filename = function() {
+                paste0(input$choice4, "_vs_", input$choice3, ".csv", sep = "")
+            },
+            content = function(file) {
+                write.csv(as.data.frame(download.results()), file, row.names = T, quote = F, col.names = NA)
+            }
+        )
+        
+        
+        #output$spit <- renderPrint(results(dds))
         
         
     })
+    
 })

@@ -6,6 +6,8 @@ library(plotly)
 library(DT)
 library(dplyr)
 library(shinyjs)
+library(tibble)
+library(DESeq2)
 options(shiny.maxRequestSize = 10000*1024^2)
 
 
@@ -24,7 +26,7 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                       textOutput("log"),
                                       
                                       # plotOutput("hist"), 
-                                      width = 4), 
+                                      width = 3), 
                                     
                                     mainPanel(
                                       
@@ -53,12 +55,44 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                       uiOutput("groups2"),width = 4,
                                       plotOutput(outputId = "scree"),
                                       downloadButton("downloadData", "Download Eigenvals"),
+                                      
                                       verbatimTextOutput("prop")), 
                                     
                                     mainPanel(
                                       plotlyOutput("plot2"))
                                   )
                          ),
+                         
+                         tabPanel(title = "DGE",
+                                  
+                                  sidebarLayout(
+                                    sidebarPanel(
+                                      
+                                      uiOutput("numerator"),
+                                      uiOutput("denominator"), 
+                                      plotOutput(outputId = "MAPlot"),
+                                      downloadButton("normcounts", "Download Normalized Counts"),
+                                      width = 4
+                                    ),
+                                    
+                                    mainPanel(
+                                      #plotOutput("group4")
+                                      DT::dataTableOutput("contrast"),
+                                      downloadButton("results", "Download DE results")
+                                      #,
+                                      #verbatimTextOutput("spit")
+                                    )
+                                  )
+                                  
+                                  
+                                  
+                                  
+                                  
+                                  
+                         ),
+                         
+                         
+                         
                          
                          shinyjs::useShinyjs(),
                          hr(),

@@ -1,5 +1,7 @@
 ### PCA-Explorer + DGE analysis using DESeq2-Shiny
 
+The limited version of this app can be accessed here: https://bixbeta.shinyapps.io/PCA-Explorer/
+
 From terminal Launch R and INSTALL the following packages:
 
 `if (!requireNamespace("BiocManager", quietly = TRUE))

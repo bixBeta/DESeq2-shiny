@@ -31,13 +31,14 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                     mainPanel(
                                       
                                       DT::dataTableOutput("mytable1"),
-                                      DT::dataTableOutput("mytable2")
+                                      DT::dataTableOutput("mytable2"), 
+                                      width = 9
                                       
                                     )
                                   )
                          ),
                          
-                         tabPanel(title = "Clust", plotOutput(outputId = "clust", width = 1080, height = 1080)),
+                         tabPanel(title = "Clust", plotOutput(outputId = "clust", width = 800, height = 600), ),
                          
                          tabPanel("3D-PCA", 
                                   sidebarLayout(
@@ -59,13 +60,13 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                       verbatimTextOutput("prop")), 
                                     
                                     mainPanel(
-                                      plotlyOutput("plot2"))
+                                      plotlyOutput("plot2"), width = 6)
                                   )
                          ),
                          
                          tabPanel(title = "DGE",
                                   
-                                  sidebarLayout(
+                                  sidebarLayout(fluid = F,
                                     sidebarPanel(
                                       
                                       uiOutput("numerator"),
@@ -78,9 +79,8 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                     mainPanel(
                                       #plotOutput("group4")
                                       DT::dataTableOutput("contrast"),
-                                      downloadButton("results", "Download DE results")
-                                      #,
-                                      #verbatimTextOutput("spit")
+                                      downloadButton("results", "Download DE results"),
+                                      verbatimTextOutput("spit"), width = 7
                                     )
                                   )
                                   
@@ -90,12 +90,8 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                   
                                   
                          ),
-                         
-                         
-                         
-                         
+
                          shinyjs::useShinyjs(),
-                         hr(),
                          div(class = "footer",
                              includeHTML("footer.html")
                          )

@@ -4,13 +4,6 @@ server <- shinyServer(function(input, output, session) {
     
     observeEvent(input$run,{
         
-        # if ( is.null(input$file)) return(NULL)
-        # inFile <- input$file$datapath
-        # if ( is.null(input$file2)) return(NULL)
-        # inFile2 <- input$file2$datapath
-        # 
-        # file <- inFile$datapath
-        # file2 <- inFile$datapath
         
         req(input$file)
         
@@ -36,12 +29,7 @@ server <- shinyServer(function(input, output, session) {
         
         # load the file into new environment and get it from there
         e = new.env()
-        # counts.u <- read.table(infile(), header = T, row.names = 1, sep = "\t")
-        # target.u <- read.table(infile2(), header = T, sep = "\t")
-        # 
-        # counts <- counts.u[,order(names(counts.u))]
-        # target <- target.u[order(target.u$label),]
-        # 
+
         progress <- Progress$new(session, min=1, max=20)
         on.exit(progress$close())
         
@@ -62,14 +50,6 @@ server <- shinyServer(function(input, output, session) {
         })
         
         output$prop <- renderPrint(summary(pca))
-        
-        
-        # output$groups <- renderUI({
-        #   tagList(
-        #     selectInput(inputId = "choice", label = "Select Groupings",
-        #                 choices = colnames(target), selected = "group"))
-        #
-        # })
         
         
         
@@ -108,15 +88,6 @@ server <- shinyServer(function(input, output, session) {
         }, collapse="<br>")
         
         
-        # observeEvent(input$rmv, {
-        #     removeUI(
-        #         selector = "div:has(> #log)"
-        #     )})
-        
-        
-        
-        
-        
         
         #resultsNames(dds)
         #
@@ -147,7 +118,7 @@ server <- shinyServer(function(input, output, session) {
         intgroup.df <- as.data.frame(colData(vsd)[, "group", drop=FALSE])
         
         # assembly the data for the plot
-        #d <- data.frame(PC1=pca$x[,1], PC2=pca$x[,2], PC3=pca$x[,3], Group=group, intgroup.df, name=colnames(vsd))
+      
         d <- data.frame(PC1=pca$x[,1], PC2=pca$x[,2], PC3=pca$x[,3], name=colnames(vsd))
         d2 <- left_join(d, target, by= c("name"="label"))
         
@@ -160,7 +131,7 @@ server <- shinyServer(function(input, output, session) {
                                         main="Cluster Dendrogram"))
         
         output$groups <- renderUI({
-            #      if(is.null(colnames(pComp.df))){return()}
+      
             
             tagList(
                 selectInput(inputId = "choice", label = "Select Groupings",
@@ -172,7 +143,7 @@ server <- shinyServer(function(input, output, session) {
         })
         
         output$groups2 <- renderUI({
-            #      if(is.null(colnames(pComp.df))){return()}
+
             
             tagList(
                 selectInput(inputId = "choice2", label = "Select Groupings",
@@ -223,10 +194,11 @@ server <- shinyServer(function(input, output, session) {
             
         })
         
-        output$scree <- renderPlot({
-            plot(pVar.df$percentVar *100,  main = "elbow plot",  xlab= "nth PC",  ylab = "Percent Var")
+        output$scree <- renderPlot(
+            plot(pVar.df$percentVar *100,  main = "elbow plot",  xlab= "nth PC",  ylab = "Percent Var"), width = 400, height = 400
             
-        })
+                
+        )
         
         
         for (i in 18:20) {
@@ -291,28 +263,24 @@ server <- shinyServer(function(input, output, session) {
             )
         })
         
+    
+        
+        dds.results <- reactive({
+            
+            req(input$choice3)
+            req(input$choice4)
+            
+            results(dds, contrast=c("group", as.character(input$choice4), 
+                                    as.character(input$choice3)), alpha = 0.05)
+            
+        })        
         
         de.data <- reactive({
             
-            if (input$choice4 == "")
-                return(NULL)
-            if (input$choice3 == "")
-                return(NULL)
-            round(as.data.frame(results(dds, contrast=c("group", as.character(input$choice4), 
-                                                        as.character(input$choice3)), alpha = 0.05)),3)
+            req(input$choice3)
+            req(input$choice4)
+            round(as.data.frame(dds.results()),3)
             
-            
-        })
-        
-        
-        ma.data <- reactive({
-            
-            if (input$choice4 == "")
-                return(NULL)
-            if (input$choice3 == "")
-                return(NULL)
-            de.test <- results(dds, contrast=c("group", input$choice4, input$choice3), alpha = 0.05)
-            plotMA(de.test, main = paste0("MAPlot ", input$choice4, "_vs_", input$choice3)) 
             
         })
         
@@ -322,34 +290,41 @@ server <- shinyServer(function(input, output, session) {
         })
         
         
-        output$MAPlot <-
-            renderPlot(ma.data())
-        
-        
-        
-        download.results <- reactive({
+        ma.data <- reactive({
             
-            if (input$choice4 == "")
-                return(NULL)
-            if (input$choice3 == "")
-                return(NULL)
-            de.test.d <- results(dds, contrast=c("group", input$choice4, input$choice3), alpha = 0.05)
-            de.test.d <- as.data.frame(de.test.d)
+            req(input$choice3)
+            req(input$choice4)
+            plotMA(dds.results(), main = paste0("MAPlot ", input$choice4, "_vs_", input$choice3)) 
+            
         })
+        
+        output$MAPlot <-
+            renderPlot(ma.data(), width = 400, height = 400)
+        
+        
         
         output$results <- downloadHandler(
             filename = function() {
                 paste0(input$choice4, "_vs_", input$choice3, ".csv", sep = "")
             },
             content = function(file) {
-                write.csv(as.data.frame(download.results()), file, row.names = T, quote = F, col.names = NA)
+                write.csv(as.data.frame(dds.results()), file, row.names = T, quote = F, col.names = NA)
             }
         )
         
-        
-        #output$spit <- renderPrint(results(dds))
-        
-        
-    })
     
+
+
+        output$spit <-
+
+            renderPrint(summary(dds.results()))
+
+        })
+
+        
+        
+        
+        
+        
+        
 })

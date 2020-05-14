@@ -24,7 +24,7 @@ From terminal Launch R and INSTALL the following packages:
   BiocManager::install("shinyjs")`<br>
 
 git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shiny.git`<br>
-cd to `PCA-Explorer/PCA-Explorer`<br>
+cd to `DESeq3-shiny/PCA-Explorer`<br>
 copy the path for the ui and server files by typing `pwd`
 
 From terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>

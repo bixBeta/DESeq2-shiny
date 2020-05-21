@@ -25,7 +25,7 @@ From terminal Launch R and INSTALL the following packages:
 
 git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shiny.git`<br>
 cd to `DESeq2-shiny/PCA-Explorer`<br>
-copy the path for the ui and server files by typing `pwd`
+copy the path for the ui and server files by using `pwd`
 
 From terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
 Copy the ip address and paste it in a web browser to launch the app

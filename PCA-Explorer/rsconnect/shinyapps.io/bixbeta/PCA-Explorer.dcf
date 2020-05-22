@@ -5,8 +5,9 @@ account: bixbeta
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2278197
-bundleId: 3145614
+bundleId: 3178098
 url: https://bixbeta.shinyapps.io/PCA-Explorer/
-when: 1589434159.10041
+when: 1590144070.69902
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: example/.DS_Store

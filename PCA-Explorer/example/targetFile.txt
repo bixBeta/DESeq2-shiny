@@ -1,0 +1,13 @@
+label	group	gender
+Sample.1	treat.b	female
+Sample.2	control.b	female
+Sample.3	treat.b	female
+Sample.4	control.b	female
+Sample.5	treat.b	female
+Sample.6	control.b	female
+Sample.7	treat.a	male
+Sample.8	control.a	male
+Sample.9	treat.a	male
+Sample.10	control.a	male
+Sample.11	treat.a	male
+Sample.12	control.a	male

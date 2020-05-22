@@ -23,6 +23,8 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                       fileInput("file2", label = "MetaData target file (tab separated .txt file)"),
                                       actionButton(inputId="run","RUN"),
                                       hr(),
+                                      actionButton(inputId="example","RUN with Example Data Set "),
+                                      hr(),
                                       textOutput("log"),
                                       
                                       # plotOutput("hist"), 
@@ -31,6 +33,7 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                     mainPanel(
                                       
                                       DT::dataTableOutput("mytable1"),
+                                      hr(),
                                       DT::dataTableOutput("mytable2"), 
                                       width = 9
                                       
@@ -38,7 +41,7 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                   )
                          ),
                          
-                         tabPanel(title = "Clust", plotOutput(outputId = "clust", width = 800, height = 600), ),
+                         tabPanel(title = "Clust", plotOutput(outputId = "clust", width = 800, height = 600)),
                          
                          tabPanel("3D-PCA", 
                                   sidebarLayout(
@@ -67,21 +70,21 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                          tabPanel(title = "DGE",
                                   
                                   sidebarLayout(fluid = F,
-                                    sidebarPanel(
-                                      
-                                      uiOutput("numerator"),
-                                      uiOutput("denominator"), 
-                                      plotOutput(outputId = "MAPlot"),
-                                      downloadButton("normcounts", "Download Normalized Counts"),
-                                      width = 4
-                                    ),
-                                    
-                                    mainPanel(
-                                      #plotOutput("group4")
-                                      DT::dataTableOutput("contrast"),
-                                      downloadButton("results", "Download DE results"),
-                                      verbatimTextOutput("spit"), width = 7
-                                    )
+                                                sidebarPanel(
+                                                  
+                                                  uiOutput("numerator"),
+                                                  uiOutput("denominator"), 
+                                                  plotOutput(outputId = "MAPlot"),
+                                                  downloadButton("normcounts", "Download Normalized Counts"),
+                                                  width = 4
+                                                ),
+                                                
+                                                mainPanel(
+                                                  #plotOutput("group4")
+                                                  DT::dataTableOutput("contrast"),
+                                                  downloadButton("results", "Download DE results"),
+                                                  verbatimTextOutput("spit"), width = 7
+                                                )
                                   )
                                   
                                   
@@ -90,7 +93,7 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                   
                                   
                          ),
-
+                         
                          shinyjs::useShinyjs(),
                          div(class = "footer",
                              includeHTML("footer.html")

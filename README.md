@@ -30,7 +30,7 @@ copy the path for the ui and server files by using `pwd`
 From terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
 Copy the ip address and paste it in a web browser to launch the app
 
-Example CountMatrix and metadata target files are available in the `examples` folder
+Example CountMatrix and metadata target files are available in the `PCA-Explorer/example` folder
 
 
 

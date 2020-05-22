@@ -4,7 +4,7 @@ The limited version of this app can be accessed here: https://bixbeta.shinyapps.
 
 To run locally (strongly recommended), use the following instructions:
 
-From terminal Launch R and INSTALL the following packages:
+Launch R Console on a Mac or PC and INSTALL the following packages:
 
 `if (!requireNamespace("BiocManager", quietly = TRUE))
   install.packages("BiocManager")`<br>
@@ -27,7 +27,8 @@ git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shi
 cd to `DESeq2-shiny/PCA-Explorer`<br>
 copy the path for the ui and server files by using `pwd`
 
-From terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
+From R Console type `shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
+Alternatively, from a bash terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
 Copy the ip address and paste it in a web browser to launch the app
 
 Example CountMatrix and metadata target files are available in the `PCA-Explorer/example` folder

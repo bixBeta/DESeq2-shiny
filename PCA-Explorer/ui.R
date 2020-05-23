@@ -57,7 +57,9 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                   sidebarLayout(
                                     sidebarPanel(
                                       uiOutput("groups2"),width = 4,
-                                      plotOutput(outputId = "scree"),
+                                      uiOutput("xaxis"),
+                                      uiOutput("yaxis"),
+                                      plotlyOutput(outputId = "scree"),
                                       downloadButton("downloadData", "Download Eigenvals"),
                                       
                                       verbatimTextOutput("prop")), 
@@ -82,6 +84,7 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                                 mainPanel(
                                                   #plotOutput("group4")
                                                   DT::dataTableOutput("contrast"),
+                                                  hr(),
                                                   downloadButton("results", "Download DE results"),
                                                   verbatimTextOutput("spit"), width = 7
                                                 )

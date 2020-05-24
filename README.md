@@ -4,6 +4,12 @@ The limited version of this app can be accessed here: https://bixbeta.shinyapps.
 
 To run locally (strongly recommended), use the following instructions:
 
+git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shiny.git`<br>
+cd to `DESeq2-shiny/PCA-Explorer`<br>
+copy the path for the ui and server files by using `pwd`, we will need this path later. 
+
+
+
 Launch R Console on a Mac or PC and INSTALL the following packages:
 
 `if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -23,11 +29,9 @@ Launch R Console on a Mac or PC and INSTALL the following packages:
 `if (!requireNamespace("shinyjs", quietly = TRUE))
   BiocManager::install("shinyjs")`<br>
 
-git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shiny.git`<br>
-cd to `DESeq2-shiny/PCA-Explorer`<br>
-copy the path for the ui and server files by using `pwd`
+Once all packages are installed:<br>
 
-From R Console type `shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
+From R Console type `shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')# (paste the copied path here)` <br>
 Alternatively, from a bash terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
 Copy the ip address and paste it in a web browser to launch the app
 

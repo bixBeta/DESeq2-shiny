@@ -50,7 +50,7 @@ The `label` column fields must match the column names of the `countMatrix.txt` f
 All labels are case-sensitive. 
 
 
-
+![alt text](assets/Demo.gif)
 
 
 

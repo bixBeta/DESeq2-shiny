@@ -35,6 +35,9 @@ From R Console type `shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')# (past
 Alternatively, from a bash terminal type `R -e shiny::runApp('~/path/to/DESeq2-shiny/PCA-Explorer')`<br>
 Copy the ip address and paste it in a web browser to launch the app
 
+
+### countMatrix and target file
+
 Example CountMatrix and metadata target files are available in the `PCA-Explorer/example` folder.
 
 In the `target` file, `label` and `group` columns are mandatory. 

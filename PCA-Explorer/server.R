@@ -207,7 +207,7 @@ server <- shinyServer(function(input, output, session) {
               marker = list(size = 8,
                             line = list(color = ~ label , width = 1))) %>%
         add_markers() %>%
-        layout(autosize = F, margin =m, title = "First 3 PC Dimensions",
+        layout(autosize = F, margin =m, title = "First 3 Principal Components",
                scene = list(xaxis = list(title = 'PC1'),
                             yaxis = list(title = 'PC2'),
                             zaxis = list(title = 'PC3')
@@ -241,7 +241,7 @@ server <- shinyServer(function(input, output, session) {
       plot_ly(data = d3 , x = ~ x, y =  ~ y, 
               width = 800, height = 600,
               color = ~ get(input$choice2),
-              marker = list(size = 10,
+              marker = list(size = 12,
                             line = list(color = ~ label, width = 1))) %>%
         add_markers() %>%
         layout(autosize = F, title = paste0(input$pcy, " vs ", input$pcx),
@@ -250,18 +250,11 @@ server <- shinyServer(function(input, output, session) {
       
     })
     
-    m2<- list(
-      l = 70,
-      r = 30,
-      b = 100,
-      t = 100,
-      pad = 2
-    )
     output$scree <- renderPlotly(
       
       plot_ly(data = pVar.df, x = ~x, y = ~ percentVar, type = "scatter", mode = "markers",
               width = 400, height = 400) %>%
-        layout(autosize = F, margin = m2,
+        layout(autosize = F, margin = m,
                xaxis = list(categoryorder = "array",title = "nth PC", categoryarray = ~x),
                yaxis = list(title = "Percent Var", ticksuffix = "%"),
                title = "elbow plot")
@@ -353,11 +346,24 @@ server <- shinyServer(function(input, output, session) {
       
     })
     
-    output$contrast <- DT::renderDataTable({
+    nc <- as.data.frame(normalized_counts)
+    nc$features <- rownames(nc)
+    
+    de.merge <- reactive({
       
-      DT::datatable(de.data(), list(pageLength = 10, scrollX=T))
+      dds.nc <- de.data()
+      dds.nc$features <- rownames(dds.nc)
+      nc2 <- left_join(nc, dds.nc, by = "features")
+      nc2 <- nc2 %>% 
+        select("features", everything())
     })
     
+    
+    output$contrast <- DT::renderDataTable({
+      
+      DT::datatable(de.merge(), list(pageLength = 10, scrollX=T), rownames = F)
+      
+    })
     
     ma.data <- reactive({
       
@@ -377,7 +383,7 @@ server <- shinyServer(function(input, output, session) {
         paste0(input$choice4, "_vs_", input$choice3, ".csv", sep = "")
       },
       content = function(file) {
-        write.csv(as.data.frame(dds.results()), file, row.names = T, quote = F, col.names = NA)
+        write.csv(as.data.frame(de.merge()), file, row.names = T, quote = F, col.names = NA)
       }
     )
     
@@ -694,16 +700,17 @@ server <- shinyServer(function(input, output, session) {
     normalized_counts <- counts(dds, normalized=TRUE)
     colnames(normalized_counts) = paste0("norm.", colnames(normalized_counts))
     normalized_counts <- round(normalized_counts, digits = 0)
+    
     # Downloadable csv of normalized counts dataset ----
     
-    output$normcounts <- downloadHandler(
-      filename = function() {
-        paste("normalizedCounts.csv", sep = "")
-      },
-      content = function(file) {
-        write.csv(normalized_counts, file, row.names = T, quote = F, col.names = NA)
-      }
-    )
+    # output$normcounts <- downloadHandler(
+    #     filename = function() {
+    #         paste("normalizedCounts.csv", sep = "")
+    #     },
+    #     content = function(file) {
+    #         write.csv(normalized_counts, file, row.names = T, quote = F, col.names = NA)
+    #     }
+    # )
     
     output$numerator <- renderUI({
       
@@ -739,14 +746,29 @@ server <- shinyServer(function(input, output, session) {
       
       req(input$choice3)
       req(input$choice4)
-      round(as.data.frame(dds.results()),3)
+      round(as.data.frame(dds.results()),3) 
+      
       
       
     })
     
+    nc <- as.data.frame(normalized_counts)
+    nc$features <- rownames(nc)
+    
+    de.merge <- reactive({
+      
+      dds.nc <- de.data()
+      dds.nc$features <- rownames(dds.nc)
+      nc2 <- left_join(nc, dds.nc, by = "features")
+      nc2 <- nc2 %>% 
+        select("features", everything())
+    })
+    
+    
     output$contrast <- DT::renderDataTable({
       
-      DT::datatable(de.data(), list(pageLength = 10, scrollX=T))
+      DT::datatable(de.merge(), list(pageLength = 10, scrollX=T), rownames = F)
+      
     })
     
     
@@ -768,7 +790,7 @@ server <- shinyServer(function(input, output, session) {
         paste0(input$choice4, "_vs_", input$choice3, ".csv", sep = "")
       },
       content = function(file) {
-        write.csv(as.data.frame(dds.results()), file, row.names = T, quote = F, col.names = NA)
+        write.csv(as.data.frame(de.merge()), file, row.names = T, quote = F, col.names = NA)
       }
     )
     
@@ -778,6 +800,10 @@ server <- shinyServer(function(input, output, session) {
     output$spit <-
       
       renderPrint(summary(dds.results()))
+    
+    
+    
+    
     
   })
   

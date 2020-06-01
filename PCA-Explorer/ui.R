@@ -32,9 +32,9 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                     
                                     mainPanel(
                                       
-                                      DT::dataTableOutput("mytable1"),
+                                      DT::dataTableOutput("mytable2"),
                                       hr(),
-                                      DT::dataTableOutput("mytable2"), 
+                                      DT::dataTableOutput("mytable1"), 
                                       width = 9
                                       
                                     )
@@ -77,7 +77,9 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                                   uiOutput("numerator"),
                                                   uiOutput("denominator"), 
                                                   plotOutput(outputId = "MAPlot"),
-                                                  downloadButton("normcounts", "Download Normalized Counts"),
+                                                  hr(),
+                                                  # downloadButton("normcounts", "Download Normalized Counts"),
+                                                  downloadButton("results", "Download DE results"),
                                                   width = 4
                                                 ),
                                                 
@@ -85,7 +87,7 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                                   #plotOutput("group4")
                                                   DT::dataTableOutput("contrast"),
                                                   hr(),
-                                                  downloadButton("results", "Download DE results"),
+                                                  
                                                   verbatimTextOutput("spit"), width = 7
                                                 )
                                   )

@@ -211,8 +211,9 @@ server <- shinyServer(function(input, output, session) {
                scene = list(xaxis = list(title = 'PC1'),
                             yaxis = list(title = 'PC2'),
                             zaxis = list(title = 'PC3')
-               )
-        )
+               ), margin = m
+        ) %>% layout(legend = list(orientation = 'h', xanchor = "center",
+                                   x = 0.5, y = -0.1))
     })
     
     
@@ -239,14 +240,16 @@ server <- shinyServer(function(input, output, session) {
       d3$y <- d2[[input$pcy]]
       
       plot_ly(data = d3 , x = ~ x, y =  ~ y, 
-              width = 800, height = 600,
+              width = 850, height = 800,
               color = ~ get(input$choice2),
               marker = list(size = 12,
                             line = list(color = ~ label, width = 1))) %>%
         add_markers() %>%
         layout(autosize = F, title = paste0(input$pcy, " vs ", input$pcx),
                xaxis = list(title = input$pcx),
-               yaxis = list(title = input$pcy))
+               yaxis = list(title = input$pcy), margin = m) %>% 
+        layout(legend = list(orientation = 'h', xanchor = "center",
+                             x = 0.5, y = -0.2))
       
     })
     
@@ -609,7 +612,8 @@ server <- shinyServer(function(input, output, session) {
                             yaxis = list(title = 'PC2'),
                             zaxis = list(title = 'PC3')
                )
-        )
+        ) %>% layout(legend = list(orientation = 'h', xanchor = "center",
+                                   x = 0.5, y = -0.2))
     })
     
     
@@ -625,7 +629,6 @@ server <- shinyServer(function(input, output, session) {
     
     
     
-    
     output$plot2 <- renderPlotly({
       
       if(is.null(input$choice2)){return()}
@@ -635,14 +638,15 @@ server <- shinyServer(function(input, output, session) {
       d3$y <- d2[[input$pcy]]
       
       plot_ly(data = d3 , x = ~ x, y =  ~ y, 
-              width = 800, height = 600,
+              width = 850, height = 800,
               color = ~ get(input$choice2),
               marker = list(size = 10,
                             line = list(color = ~ label, width = 1))) %>%
         add_markers() %>%
-        layout(autosize = F, title = paste0(input$pcy, " vs ", input$pcx),
+        layout(autosize = F, margin = m2, title = paste0(input$pcy, " vs ", input$pcx),
                xaxis = list(title = input$pcx),
-               yaxis = list(title = input$pcy))
+               yaxis = list(title = input$pcy)) %>% layout(legend = list(orientation = 'h', xanchor = "center",
+                                                                         x = 0.5, y = -0.2))
       
     })
     

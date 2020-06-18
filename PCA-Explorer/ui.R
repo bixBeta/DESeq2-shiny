@@ -60,12 +60,13 @@ ui <- shinyUI(navbarPage(title = "DESeq2-Shiny",
                                       uiOutput("xaxis"),
                                       uiOutput("yaxis"),
                                       plotlyOutput(outputId = "scree"),
+                                      hr(),
                                       downloadButton("downloadData", "Download Eigenvals"),
-                                      
+                                      hr(),
                                       verbatimTextOutput("prop")), 
                                     
                                     mainPanel(
-                                      plotlyOutput("plot2"), width = 6)
+                                      plotlyOutput("plot2"), width = 8)
                                   )
                          ),
                          

@@ -1,0 +1,1 @@
+shiny::runApp('/Users/fa286/Documents/shiny-dev/PCA-Explorer/PCA-Explorer')

@@ -8,7 +8,21 @@ steps:
   with:
     r-version: '3.6' # The R version to download (if necessary) and use.
 - run: Rscript -e 'print("hello")'
-
+  
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        R: [ '3.5.3', '3.6.1' ]
+    name: R ${{ matrix.R }} sample
+    steps:
+      - uses: actions/checkout@master
+      - name: Setup R
+        uses: r-lib/actions/setup-R@v1
+        with:
+          r-version: ${{ matrix.R }}
+      - run: Rscript -e 'print("hello")'
 
 # jobs:
 #   R-CMD-check:

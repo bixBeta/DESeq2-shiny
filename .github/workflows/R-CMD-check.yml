@@ -31,9 +31,9 @@ jobs:
         config:
         - { os: windows-latest, r: '3.5'}
         - { os: windows-latest, r: '3.6'}
-        - { os: macOS-latest, r: '3.6'}
-        - { os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-        - { os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+#         - { os: macOS-latest, r: '3.6'}
+#         - { os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+#         - { os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -49,14 +49,14 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@master
 #       - run: Rscript -e 'print("hello")'
-      - run: Rscript -e 'if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")'
-      - run: Rscript -e 'if (!requireNamespace("DESeq2", quietly = TRUE)) BiocManager::install("DESeq2")'
-      - run: Rscript -e 'if (!requireNamespace("dplyr", quietly = TRUE)) install.packages("dplyr")'
-      - run: Rscript -e 'if (!requireNamespace("plotly", quietly = TRUE)) install.packages("plotly")'
-      - run: Rscript -e 'if (!requireNamespace("shiny", quietly = TRUE)) BiocManager::install("shiny")'
-      - run: Rscript -e 'if (!requireNamespace("tibble", quietly = TRUE)) install.packages("tibble")'
-      - run: Rscript -e 'if (!requireNamespace("DT", quietly = TRUE)) install.packages("DT")'
-      - run: Rscript -e 'if (!requireNamespace("shinyjs", quietly = TRUE)) BiocManager::install("shinyjs")'
+      - run: Rscript -e "if (!requireNamespace('BiocManager', quietly = TRUE)) install.packages('BiocManager')"
+      - run: Rscript -e "if (!requireNamespace('DESeq2', quietly = TRUE)) BiocManager::install('DESeq2')"
+      - run: Rscript -e "if (!requireNamespace('dplyr', quietly = TRUE)) install.packages('dplyr')"
+      - run: Rscript -e "if (!requireNamespace('plotly', quietly = TRUE)) install.packages('plotly')"
+      - run: Rscript -e "if (!requireNamespace('shiny', quietly = TRUE)) BiocManager::install('shiny')"
+      - run: Rscript -e "if (!requireNamespace('tibble', quietly = TRUE)) install.packages('tibble')"
+      - run: Rscript -e "if (!requireNamespace('DT', quietly = TRUE)) install.packages('DT')"
+      - run: Rscript -e "if (!requireNamespace('shinyjs', quietly = TRUE)) BiocManager::install('shinyjs')"
 #       - name: Query dependencies
 #         run: Rscript -e "install.packages('remotes')" -e "saveRDS(remotes::dev_package_deps(dependencies = TRUE), 'depends.Rds', version = 2)"
 

@@ -4,7 +4,7 @@ The limited version of this app can be accessed here: https://bixbeta.shinyapps.
 
 To run locally (strongly recommended), use the following instructions:
 
-git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shiny.git`<br>
+git clone this repository using `git clone https://github.com/bixBeta/DESeq2-shiny.git`<br> or using the green (Code/Clone) button on top of this page
 cd to `DESeq2-shiny/PCA-Explorer`<br>
 copy the path for the ui and server files by using `pwd`, we will need this path later. 
 

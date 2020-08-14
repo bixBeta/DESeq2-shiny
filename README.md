@@ -1,3 +1,5 @@
+![R-CMD-check](https://github.com/bixBeta/DESeq2-shiny/workflows/R-CMD-check/badge.svg)
+
 ### PCA-Explorer + DGE analysis using DESeq2-Shiny
 
 The limited version of this app can be accessed here: https://bixbeta.shinyapps.io/PCA-Explorer/

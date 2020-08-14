@@ -9,50 +9,51 @@ steps:
     r-version: '3.6' # The R version to download (if necessary) and use.
 - run: Rscript -e 'print("hello")'
   
-jobs:
-  build:
-    runs-on: ubuntu-18.04
-    strategy:
-      matrix:
-        R: [ '3.5.3', '3.6.1' ]
-    name: R ${{ matrix.R }} sample
-    steps:
-      - uses: actions/checkout@master
-      - name: Setup R
-        uses: r-lib/actions/setup-R@v1
-        with:
-          r-version: ${{ matrix.R }}
-      - run: Rscript -e 'print("hello")'
-
 # jobs:
-#   R-CMD-check:
-#     if: "! contains(github.event.head_commit.message, '[ci skip]')"
-#     runs-on: ${{ matrix.config.os }}
-#     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
-    
+#   build:
+#     runs-on: ubuntu-18.04
 #     strategy:
-#       fail-fast: false
 #       matrix:
-#         config:
-#         - { os: windows-latest, r: '3.5'}
-#         - { os: windows-latest, r: '3.6'}
-#         - { os: macOS-latest, r: '3.6'}
-#         - { os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-#         - { os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
-
-#     env:
-#       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
-#       CRAN: ${{ matrix.config.cran }}
-
-
+#         R: [ '3.5.3', '3.6.1' ]
+#     name: R ${{ matrix.R }} sample
 #     steps:
-#       - uses: actions/checkout@v1
-
-#       - uses: r-lib/actions/setup-r@master
+#       - uses: actions/checkout@master
+#       - name: Setup R
+#         uses: r-lib/actions/setup-R@v1
 #         with:
-#           r-version: ${{ matrix.config.r }}
+#           r-version: ${{ matrix.R }}
+#       - run: Rscript -e 'print("hello")'
 
-#       - uses: r-lib/actions/setup-pandoc@master
+jobs:
+  R-CMD-check:
+    if: "! contains(github.event.head_commit.message, '[ci skip]')"
+    runs-on: ${{ matrix.config.os }}
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+        - { os: windows-latest, r: '3.5'}
+        - { os: windows-latest, r: '3.6'}
+        - { os: macOS-latest, r: '3.6'}
+        - { os: ubuntu-16.04, r: '3.5', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+        - { os: ubuntu-16.04, r: '3.6', cran: "https://demo.rstudiopm.com/all/__linux__/xenial/latest"}
+
+    env:
+      R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
+      CRAN: ${{ matrix.config.cran }}
+
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - uses: r-lib/actions/setup-r@master
+        with:
+          r-version: ${{ matrix.config.r }}
+
+      - uses: r-lib/actions/setup-pandoc@master
+      - run: Rscript -e 'print("hello")'
 
 #       - name: Query dependencies
 #         run: Rscript -e "install.packages('remotes')" -e "saveRDS(remotes::dev_package_deps(dependencies = TRUE), 'depends.Rds', version = 2)"
